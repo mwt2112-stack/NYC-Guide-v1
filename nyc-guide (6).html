@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>Where to Eat in New York - A Local's Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:light;
+    --bg:#e8ddc9;
+    --paper:#f1e8d6;
+    --paper2:#e2d2b8;
+    --ink:#3d2817;
+    --ink-soft:#6b4f35;
+    --rule:#c4b291;
+    --accent:#7b4a2a;
+    --accent2:#9c6b42;
+    --glass:rgba(241,232,214,.74);
+    --shadow:rgba(61,40,23,.22);
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;background:var(--bg)}
+  body{
+    min-height:100vh;
+    background:var(--bg)!important;
+    color:var(--ink)!important;
+    font-family:'Inter Tight',-apple-system,BlinkMacSystemFont,sans-serif;
+    font-weight:300;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  body.lock{overflow:hidden}
+
+  .grain{
+    position:fixed;inset:0;pointer-events:none;opacity:.28;z-index:1;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.1 0 0 0 0 0.05 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .progress{position:fixed;top:0;left:0;height:2px;background:var(--accent);width:0%;z-index:100}
+  .wrap{max-width:1180px;margin:0 auto;padding:60px 32px 120px;position:relative;z-index:2}
+
+  header{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:36px;align-items:end;border-bottom:1px solid var(--rule);padding-bottom:42px;margin-bottom:26px}
+  .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;display:flex;align-items:center;gap:12px}
+  .kicker:after{content:"";flex:1;max-width:210px;height:1px;background:var(--rule)}
+  h1{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(46px,8vw,92px);line-height:.94;letter-spacing:-.025em;color:var(--ink);margin-bottom:26px}
+  h1 em{font-style:italic;font-weight:300;color:var(--accent);display:inline-block;animation:drift 8s ease-in-out infinite}
+  @keyframes drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  .lede{font-family:'Fraunces',serif;font-weight:300;font-size:18px;line-height:1.55;color:var(--ink-soft);max-width:620px;font-style:italic}
+
+  .meta-card{background:var(--glass);border:1px solid var(--rule);padding:18px;box-shadow:0 18px 42px var(--shadow);backdrop-filter:blur(18px) saturate(135%);-webkit-backdrop-filter:blur(18px) saturate(135%)}
+  .meta-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  .meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+  .meta-box{background:var(--paper);border:1px solid var(--rule);padding:10px}
+  .meta-box strong{font-family:'Fraunces',serif;font-size:30px;font-weight:400;display:block;line-height:1}
+  .meta-box span{display:block;margin-top:7px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+  .meta-note{font-size:13px;color:var(--ink-soft)}
+
+  .toolbar{position:sticky;top:0;z-index:20;margin:0 -32px 46px;padding:14px 32px;background:linear-gradient(90deg,rgba(232,221,201,.92),rgba(241,232,214,.76));border-bottom:1px solid var(--rule);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);box-shadow:0 12px 34px rgba(61,40,23,.08)}
+  .toolbar-inner{max-width:1180px;margin:0 auto;display:flex;justify-content:flex-end;align-items:center;gap:14px}
+  .toolbar-label{margin-right:auto;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px}
+  .toolbar-label:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(123,74,42,.35);animation:beacon 2.8s ease-in-out infinite}
+  @keyframes beacon{0%,100%{box-shadow:0 0 0 0 rgba(123,74,42,.25);transform:scale(1)}50%{box-shadow:0 0 0 9px rgba(123,74,42,0);transform:scale(1.22)}}
+  .search{position:relative}.search:before{content:"⌕";position:absolute;left:15px;top:50%;transform:translateY(-52%);font-family:'Fraunces',serif;color:var(--accent);font-size:18px;z-index:1}
+  .search input{width:min(360px,42vw);border:1px solid var(--rule);background:rgba(241,232,214,.72);color:var(--ink);border-radius:100px;padding:11px 16px 11px 42px;font-family:'Inter Tight',sans-serif;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 20px rgba(61,40,23,.06);transition:all .28s var(--ease)}
+  .search input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(123,74,42,.1),0 12px 28px rgba(61,40,23,.12);background:#f5edcc}
+
+  .guide-layout{display:grid;grid-template-columns:190px 1fr;gap:28px;align-items:start}
+  .chapter-index{position:sticky;top:92px;align-self:start;border-left:1px solid var(--rule);padding:8px 0 8px 16px;max-height:calc(100vh - 120px);overflow:auto}
+  .chapter-kicker{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+  .chapter-link{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--ink-soft);font-family:'Inter Tight',sans-serif;font-size:13px;padding:7px 0 7px 14px;cursor:pointer;position:relative;transition:color .25s var(--ease),transform .25s var(--ease)}
+  .chapter-link:before{content:"";position:absolute;left:-20px;top:50%;width:7px;height:7px;border-radius:50%;background:var(--rule);transform:translateY(-50%);transition:all .25s var(--ease)}
+  .chapter-link:hover{color:var(--accent);transform:translateX(3px)}
+  .chapter-link.active{color:var(--ink);font-weight:500;transform:translateX(5px)}
+  .chapter-link.active:before{background:var(--accent);box-shadow:0 0 0 6px rgba(123,74,42,.12),0 0 18px rgba(123,74,42,.5)}
+
+  .section{margin-bottom:58px;scroll-margin-top:150px}
+  .section-head{display:grid;grid-template-columns:74px 1fr;gap:22px;align-items:baseline;border-bottom:1px solid var(--ink);padding-bottom:17px;margin-bottom:20px;position:relative}
+  .section-head:after{content:"";position:absolute;left:0;bottom:-1px;width:74px;height:1px;background:var(--accent)}
+  .section-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--accent)}
+  .section h2{font-family:'Fraunces',serif;font-size:clamp(28px,4vw,40px);font-weight:400;line-height:1;letter-spacing:-.01em}
+  .section-note{grid-column:2;margin-top:5px;font-family:'Fraunces',serif;font-size:13px;font-style:italic;color:var(--ink-soft)}
+
+  .tile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:14px}
+  .tile{appearance:none;text-align:left;border:1px solid var(--rule);background:rgba(241,232,214,.76);color:var(--ink);padding:16px;min-height:184px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(61,40,23,.08);transition:transform .32s var(--ease),box-shadow .32s var(--ease),border-color .32s var(--ease),background .32s var(--ease);animation:tileRise .62s var(--ease) both}
+  @keyframes tileRise{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+  .tile:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);opacity:.68}
+  .tile:after{content:"";position:absolute;inset:-60% -40%;background:linear-gradient(115deg,transparent 36%,rgba(255,255,255,.28) 48%,transparent 60%);opacity:0;transform:translateX(-45%);transition:opacity .3s var(--ease),transform .9s var(--ease)}
+  .tile:hover{transform:translateY(-5px);box-shadow:0 18px 36px rgba(61,40,23,.16),0 0 0 1px rgba(123,74,42,.18),0 0 28px rgba(123,74,42,.12);border-color:var(--accent);background:#f5edcc}
+  .tile:hover:after{opacity:1;transform:translateX(45%)}
+  .tile-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:18px;position:relative;z-index:1}
+  .tile-num,.tile-neighborhood{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+  .tile h3{font-family:'Fraunces',serif;font-size:24px;font-weight:500;line-height:1.02;letter-spacing:-.012em;margin-bottom:9px;position:relative;z-index:1}
+  .tile p{font-size:13px;color:var(--ink-soft);line-height:1.38;position:relative;z-index:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;position:relative;z-index:1}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);border:1px solid rgba(196,178,145,.9);background:rgba(232,221,201,.56);padding:4px 7px;border-radius:100px}
+
+  .overlay{position:fixed;inset:0;background:rgba(42,27,14,.24);z-index:80;opacity:0;pointer-events:none;transition:opacity .35s var(--ease);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+  .overlay.open{opacity:1;pointer-events:auto}
+  .panel{position:fixed;top:18px;right:18px;bottom:18px;width:min(520px,calc(100vw - 36px));z-index:90;transform:translateX(calc(100% + 34px));transition:transform .55s var(--ease);background:linear-gradient(145deg,rgba(245,237,220,.74),rgba(226,210,184,.68));border:1px solid rgba(196,178,145,.88);box-shadow:0 26px 70px rgba(61,40,23,.34);backdrop-filter:blur(24px) saturate(145%);-webkit-backdrop-filter:blur(24px) saturate(145%);display:flex;flex-direction:column;overflow:hidden}
+  .panel.open{transform:translateX(0);animation:panelGlow 2.4s ease-in-out infinite alternate}
+  @keyframes panelGlow{from{box-shadow:0 26px 70px rgba(61,40,23,.34),0 0 0 rgba(123,74,42,0)}to{box-shadow:0 30px 82px rgba(61,40,23,.38),0 0 34px rgba(123,74,42,.18)}}
+  .panel-scroll{overflow:auto;padding:24px}
+  .panel-close{position:absolute;right:14px;top:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--rule);background:rgba(241,232,214,.76);color:var(--ink);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:20px;z-index:3;transition:all .25s var(--ease)}
+  .panel-close:hover{background:var(--ink);color:var(--paper);transform:rotate(90deg)}
+  .panel-kicker{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;padding-right:46px}
+  .panel h2{font-family:'Fraunces',serif;font-size:44px;line-height:.98;font-weight:400;letter-spacing:-.02em;margin-bottom:10px;padding-right:36px}
+  .panel-sub{font-family:'Fraunces',serif;font-style:italic;color:var(--ink-soft);font-size:17px;line-height:1.45;margin-bottom:18px}
+  .panel-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+  .panel .tag{background:rgba(241,232,214,.72)}
+  .detail-block{border-top:1px solid rgba(196,178,145,.88);padding-top:16px;margin-top:16px}
+  .detail-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .highlights{display:grid;gap:8px;list-style:none}
+  .highlights li{position:relative;padding-left:18px;font-size:14px;color:var(--ink-soft);line-height:1.42}
+  .highlights li:before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .links{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .action.hidden{display:none}
+  .link-note{grid-column:1/-1;font-size:12px;color:var(--ink-soft);line-height:1.38;margin-top:2px;font-style:italic}
+  .action{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--rule);background:rgba(241,232,214,.74);color:var(--ink);padding:11px 12px;text-decoration:none;font-size:13px;transition:all .25s var(--ease)}
+  .action:hover{background:var(--ink);color:var(--paper);border-color:var(--ink);transform:translateY(-2px)}
+  .action span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+  .map-frame{width:100%;height:250px;border:1px solid var(--rule);margin-top:10px;background:var(--paper);filter:saturate(.9) sepia(.08)}
+  .map-note{font-size:12px;color:var(--ink-soft);margin-top:8px}
+
+  .plan-rows{display:grid;gap:10px}
+  .plan-row{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:start;padding:8px 0;border-bottom:1px dashed rgba(196,178,145,.88)}
+  .plan-row:last-child{border-bottom:none}
+  .plan-row-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);padding-top:2px}
+  .plan-row-value{font-size:13.5px;color:var(--ink);line-height:1.45}
+  .plan-row-value strong{font-weight:500;color:var(--accent)}
+  @media (max-width:520px){
+    .plan-row{grid-template-columns:1fr;gap:4px;padding:10px 0}
+  }
+
+  .empty{display:none;border:1px dashed var(--rule);padding:26px;text-align:center;color:var(--ink-soft);font-family:'Fraunces',serif;font-style:italic;font-size:18px;background:rgba(241,232,214,.55)}
+  footer{margin-top:80px;padding-top:32px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+  footer .mark{font-family:'Fraunces',serif;font-style:italic;font-size:14px;letter-spacing:0;text-transform:none;color:var(--accent)}
+
+  .tile-bottom-row{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:16px;position:relative;z-index:1;flex-wrap:wrap}
+  .tile-bottom-row .tag-row{margin-top:0;flex:1;min-width:0}
+  .tile-transit{display:flex;align-items:center;gap:4px;flex-shrink:0;max-width:100%;overflow:hidden}
+  .tile-transit .mta-bullet-sm{flex-shrink:0}
+  .mta-bullet-sm{width:18px;height:18px;font-size:9.5px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:600;flex-shrink:0;letter-spacing:0}
+  .tile-transit-walk{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.06em;color:var(--ink-soft);white-space:nowrap;margin-left:3px}
+
+  /* ── Photo block removed ── */
+
+
+  .transit-loading{display:flex;align-items:center;gap:9px;color:var(--ink-soft);font-size:13px}
+  .transit-spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--rule);border-top-color:var(--accent);border-radius:50%;animation:spin .75s linear infinite;flex-shrink:0}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .transit-error{font-size:13px;color:var(--ink-soft);font-style:italic}
+  .transit-stop{display:block;margin-bottom:14px}
+  .transit-stop:last-child{margin-bottom:0}
+  .transit-lines{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px}
+  .mta-bullet{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:#fff;flex-shrink:0;letter-spacing:0;position:relative}
+  .mta-bullet-sm{}
+  .transit-info{min-width:0}
+  .transit-stop-name{font-size:13px;font-weight:500;color:var(--ink);line-height:1.3;margin-bottom:3px}
+  .transit-walk{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-soft);display:flex;align-items:center;gap:5px}
+  .transit-walk:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
+  .transit-divider{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin:10px 0 6px;opacity:.6}
+
+  @media(max-width:780px){
+    .wrap{padding:42px 20px 90px}
+    header{grid-template-columns:1fr;gap:24px}
+    .toolbar{margin:0 -20px 36px;padding:12px 20px}
+    .toolbar-inner{display:grid;grid-template-columns:1fr}.toolbar-label{display:none}.search input{width:100%}
+    .guide-layout{display:block}.chapter-index{position:relative;top:auto;display:flex;gap:8px;overflow:auto;border-left:0;border-bottom:1px solid var(--rule);padding:0 0 14px;margin-bottom:24px;max-height:none}.chapter-kicker{display:none}.chapter-link{white-space:nowrap;border:1px solid var(--rule);border-radius:100px;background:rgba(241,232,214,.72);padding:7px 12px}.chapter-link:before{display:none}.chapter-link.active{background:var(--ink);color:var(--paper);transform:none}
+    .section-head{grid-template-columns:42px 1fr;gap:12px}
+    .section-note{grid-column:2}.tile-grid{grid-template-columns:1fr}
+    .panel{top:10px;right:10px;bottom:10px;width:calc(100vw - 20px)}
+    .links{grid-template-columns:1fr}
+    footer{display:grid;gap:10px}
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="progress" id="progress"></div>
+<div class="overlay" id="overlay"></div>
+<aside class="panel" id="panel" aria-hidden="true">
+  <button class="panel-close" id="closePanel" aria-label="Close details">×</button>
+  <div class="panel-scroll">
+    <div class="panel-kicker" id="panelKicker">Restaurant Details</div>
+    <h2 id="panelTitle">Restaurant</h2>
+    <p class="panel-sub" id="panelDesc"></p>
+    <div class="panel-tags" id="panelTags"></div>
+    <div class="detail-block">
+      <div class="detail-label">Menu Highlights</div>
+      <ul class="highlights" id="panelHighlights"></ul>
+    </div>
+    <div class="detail-block" id="planBlock" style="display:none">
+      <div class="detail-label">Plan the Visit</div>
+      <div class="plan-rows" id="planRows"></div>
+    </div>
+    <div class="detail-block" id="transitBlock">
+      <div class="detail-label">Getting There</div>
+      <div id="transitContent" class="transit-loading">
+        <span class="transit-spinner"></span><span class="transit-loading-text">Finding nearest subway…</span>
+      </div>
+    </div>
+    <div class="detail-block">
+      <div class="detail-label">Links</div>
+      <div class="links">
+        <a class="action" id="websiteLink" target="_blank" rel="noopener"><span>Website / Menu</span>↗</a>
+        <a class="action" id="directionsLink" target="_blank" rel="noopener"><span>Directions</span>↗</a>
+        <p class="link-note" id="linkNote">Website opens the restaurant's listing on Google Maps where you'll find the official site, phone, hours, and current address. Directions uses Google Maps for live routing from your location.</p>
+      </div>
+    </div>
+    <div class="detail-block">
+      <div class="detail-label">Map View</div>
+      <iframe class="map-frame" id="mapFrame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <p class="map-note">Map opens Google Maps using the restaurant name and NYC location so the route stays current.</p>
+    </div>
+  </div>
+</aside>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="kicker">A Local's Guide</div>
+      <h1>Where to Eat<br>in <em>New York</em></h1>
+      <p class="lede">A local's guide. Whether you've got a weekend or a week, these are the spots worth your time - sorted by craving, neighborhood, and occasion. Tap any tile for must-orders, directions, and a live map.</p>
+    </div>
+    <div class="meta-card">
+      <div class="meta-title">Guide Dashboard</div>
+      <div class="meta-grid">
+        <div class="meta-box"><strong>88</strong><span>Spots</span></div>
+        <div class="meta-box"><strong>15</strong><span>To Try</span></div>
+        <div class="meta-box"><strong>20</strong><span>Categories</span></div>
+      </div>
+      <p class="meta-note">Use filters for the occasion, then open a tile for the practical details: menu, website, directions, and map.</p>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="toolbar-inner">
+      <div class="toolbar-label">Concierge Search</div>
+      <div class="search"><input id="searchInput" type="search" placeholder="Search spot, cuisine, area..."></div>
+    </div>
+  </div>
+
+  <div class="guide-layout">
+    <nav class="chapter-index" id="chapterIndex" aria-label="Restaurant category index">
+      <div class="chapter-kicker">Chapters</div>
+    </nav>
+    <main id="sections"></main>
+  </div>
+  <div class="empty" id="empty">No matching restaurants. Clear the search or select another category.</div>
+
+  <footer>
+    <span>NYC / A Local's Guide</span>
+    <span class="mark">click, inspect, then go</span>
+    <span>v.15</span>
+  </footer>
+</div>
+
+<script>
+const restaurants = [
+ {n:'Anixi',c:'Favorites',area:'Mediterranean',d:'My pick for plant-based. Lush, high-end Mediterranean - the vegan dinner that makes everyone at the table forget what they ordered.',h:['Vegan Mediterranean plates','Mezze','Upscale plant-based dinner'],tags:['Vegan','Mediterranean','Favorite'],prime:'Tuesday-Saturday dinner, 7-9pm',rez:'Recommended on weekends',dress:'Smart casual'},
+ {n:'Sunday Morning',c:'Favorites',area:'Lower East Side',d:'My weekend reset. LES cafe famous for cinnamon rolls - go early, they sell out before noon.',h:['Cinnamon rolls','Weekend brunch plates','Coffee program'],tags:['Brunch','LES','Cinnamon Rolls','Favorite'],prime:'Saturday/Sunday before noon - cinnamon rolls sell out fast',rez:'Walk-in only'},
+ {n:'Kazunori',c:'Favorites',area:'Union Square',d:'My handroll standard. Counter seat, set menu, watch each roll get built and eat it the second it lands.',h:['Hand roll sets','Warm rice','Crisp nori'],tags:['Handrolls','Sushi','Counter','Favorite'],prime:'Off-peak weekday lunch or 9-10pm dinner to skip the line',rez:'Walk-in counter only - expect a wait at peak'},
+ {n:"Melba's",c:'Favorites',area:'Harlem',d:'My Harlem standard. Chicken and waffles that earned every bit of the reputation. The room is as warm as the food.',h:['Chicken and waffles','Soul food classics','Harlem dinner'],tags:['Soul','Harlem','Classic','Favorite'],prime:'Late dinner Wednesday-Sunday',rez:'Recommended for weekends'},
+ {n:'Time Out Market New York',c:'Favorites',area:'DUMBO',d:"My group dinner answer. Brooklyn's best vendors under one roof, with a Manhattan skyline view that does half the work.",h:['Food hall vendors','Rooftop views','Group-friendly dinner'],tags:['Food Hall','DUMBO','Views','Favorite'],prime:'Weekend afternoons or sunset for the skyline',rez:'Walk-in food hall'},
+ {n:'Anita Gelato',c:'Favorites',area:'UES',d:'My dessert default. Artisan gelato with rotating flavors - the kind of stop that turns a walk into a destination.',h:['Artisan gelato','Rotating seasonal flavors','UES walk-up'],tags:['Dessert','Gelato','UES','Favorite'],prime:'After dinner or weekend afternoons',rez:'Walk-in only'},
+ {n:'Birria LES',c:'Favorites',area:'LES',d:'My taco fix. Some of the best in the city - messy, deliberate, essential. The consomé-dipped quesabirria is the order.',h:['Quesabirria tacos','Consomé for dipping','Lower East Side counter'],tags:['Tacos','LES','Favorite'],prime:'Lunch or late-night',rez:'Walk-in counter'},
+ {n:'Felice 56',c:'After Work',area:'Midtown',d:'Midtown after the office. Italian that closes the day quietly and well.',h:['Tuscan-style pastas','Wine by the glass','Polished after-work dinner'],tags:['Italian','Midtown','After Work'],prime:'Weeknight dinner',rez:'Recommended',dress:'Smart casual'},
+ {n:'Sugar Monk',c:'After Work',area:'Harlem',d:'Harlem cocktail den. Dim, intentional, the kind of room where one drink turns into three.',h:['Craft cocktails','Low-lit lounge energy','Date-night worthy drinks'],tags:['Cocktails','Harlem','Lounge'],prime:'Thursday-Saturday, 8pm onward',rez:'Strongly recommended - small room',dress:'Smart casual'},
+ {n:'Debajo',c:'After Work',area:'Hidden',d:"Hidden, intimate, your spot. The one you don't put on Instagram.",h:['Tapas-style plates','Quiet cocktails','Intimate room'],tags:['Hidden','Intimate','Drinks'],prime:'Weeknight dinner',rez:'Recommended'},
+ {n:'Tasca NYC',c:'Spanish',area:'Tapas',d:'Tapas and wine after a long day. Pace yourself or don’t - both work.',h:['Spanish tapas','Wine list','Shared plates'],tags:['Spanish','Tapas','Wine'],prime:'Weeknights or weekend pre-dinner',rez:'Recommended for weekends'},
+ {n:'Yuca Bar',c:'After Work',area:'East Village',d:'East Village, easy energy, plantains on the table before you finish ordering.',h:['Latin small plates','Plantains','Mojitos and margaritas'],tags:['Latin','East Village','Casual'],prime:'Weekend brunch or weeknight happy hour',rez:'Walk-in friendly'},
+ {n:'Tomi Jazz',c:'After Work',area:'Midtown East',d:'Midtown East basement bar. Live jazz, Japanese small plates, the kind of room that feels like a secret you stumbled into.',h:['Live jazz nights','Japanese small plates','Whiskey list'],tags:['Jazz','Japanese','Hidden'],prime:'Wednesday-Saturday, 8pm onward for live sets',rez:'Recommended on jazz nights',dress:'Smart casual'},
+ {n:'Mezcali',c:'After Work',area:'Financial District',d:'Cali-Mex mezcal bar in FiDi. Two floors, deep mezcal program, late-night kitchen - the after-work answer downtown.',h:['Mezcal cocktails','Cali-Mex tacos','Late-night kitchen'],tags:['Mezcal','Mexican','Financial District'],prime:'After 8pm Tuesday-Saturday',rez:'Recommended on weekends',website:'https://www.mezcalinyc.com/'},
+ {n:'Lolita',c:'After Work',area:'LES',d:'LES cocktail bar with staying power. Tight drinks list, lived-in room, the kind of spot regulars protect.',h:['Cocktails','LES neighborhood bar','Late-night drinks'],tags:['Cocktails','LES','Bar'],prime:'Late evening, Thursday-Saturday',rez:'Walk-in bar'},
+ {n:'Amélie West Village',c:'Happy Hour',area:'West Village',d:'French bistro and wine bar with a happy hour that punches. Discount oysters, $7 wines by the glass, and the West Village sidewalk in your favor.',h:['Discount oysters','Wines by the glass','French bistro plates'],tags:['Happy Hour','French','West Village','Wine'],prime:'4-7pm daily for happy hour',rez:'Walk-in friendly at happy hour'},
+ {n:'LELABAR',c:'Happy Hour',area:'West Village',d:'Tiny West Village wine bar built for the early-evening pour. Natural wines, charcuterie, and the kind of room that makes one glass turn into three.',h:['Natural wines','Charcuterie boards','Small West Village room'],tags:['Happy Hour','Wine Bar','West Village','Natural Wine'],prime:'5-8pm weeknights',rez:'Walk-in - tiny room, arrive early'},
+ {n:'Leyla',c:'Happy Hour',area:'West Village',d:'Mediterranean small plates with a happy hour that draws regulars. Mezze, cocktails, and a candle-lit room that earns the wait.',h:['Mezze','Cocktails','Mediterranean small plates'],tags:['Happy Hour','Mediterranean','West Village'],prime:'5-7pm happy hour or dinner after 8',rez:'Recommended for dinner'},
+ {n:'Verlaine',c:'Happy Hour',area:'LES',d:'LES happy hour institution. Lychee martinis at the price of a beer, dim lounge energy, the kind of move that starts a long night.',h:['Lychee martinis','Discount cocktail hour','Lounge atmosphere'],tags:['Happy Hour','Cocktails','LES','Lounge'],prime:'5-8pm for half-price lychee martinis',rez:'Walk-in'},
+ {n:'Los Tacos No. 1',c:'Tacos',area:'Chelsea Market',d:'Chelsea Market counter. Adobada, no chair, no apologies - one of the cleanest tacos in the city.',h:['Adobada tacos','Carne asada','Counter-service perfection'],tags:['Tacos','Chelsea','Counter'],prime:'Off-peak hours to skip the line',rez:'Walk-in counter only'},
+ {n:'Birria LES',c:'Tacos',area:'LES',d:'Some of the best tacos in the city. Messy, deliberate, essential.',h:['Birria tacos','Consommé dip','Late-night LES bite'],tags:['Birria','LES','Tacos'],prime:'Lunch or late-night',rez:'Walk-in counter'},
+ {n:'Esse Taco',c:'Tacos',area:'Modern',d:"Modern Mexican with style. Tight menu, sharp execution, room that knows it's good.",h:['Modern tacos','Salsas','Sharp casual design'],tags:['Mexican','Modern','Tacos'],prime:'Weeknight dinner',rez:'Recommended'},
+ {n:'Tacombi',c:'Tacos',area:'Group-Friendly',d:'Mexico City beach-shack vibes scaled up. Reliable, fun, easy with a group.',h:['Tacos al pastor','Corn esquites','Margaritas'],tags:['Mexican','Group','Tacos'],prime:'Anytime - good for groups',rez:'Recommended for groups'},
+ {n:'Taqueria Sol Maya',c:'Tacos',area:'East Harlem',d:'Authentic flavors, no hype, neighborhood loyalty. The East Harlem fix.',h:['Traditional tacos','Simple neighborhood plates','Salsas'],tags:['East Harlem','Mexican','Neighborhood'],prime:'Weekday lunch',rez:'Walk-in only'},
+ {n:'Pio Pio 8',c:'Spanish',area:'Peruvian',d:'Peruvian rotisserie. The green sauce should be illegal - order the matador.',h:['Rotisserie chicken','Green sauce','Matador combo'],tags:['Peruvian','Chicken','Group'],prime:'Weeknight dinner - order the matador',rez:'Walk-in or call ahead'},
+ {n:'Casa Ora',c:'Spanish',area:'Venezuelan',d:"Elegant Venezuelan. Feels like a warm hug from someone's family.",h:['Arepas','Venezuelan comfort plates','Cocktails'],tags:['Venezuelan','Elegant','Comfort'],prime:'Weekend dinner',rez:'Recommended',dress:'Smart casual'},
+ {n:'Cocotazo',c:'Spanish',area:'East Harlem',d:'East Harlem Puerto Rican. Mofongo, pernil, the kind of plate that reminds you whose neighborhood this is.',h:['Mofongo','Pernil','Puerto Rican classics'],tags:['Puerto Rican','East Harlem','Mofongo'],prime:'Weeknight lunch or dinner',rez:'Walk-in'},
+ {n:'Casa Adela',c:'Spanish',area:'Loisaida',d:'Loisaida institution. Rotisserie chicken and pasteles served the way they should be.',h:['Rotisserie chicken','Pasteles','Rice and beans'],tags:['Puerto Rican','Loisaida','Classic'],prime:'Weekday lunch',rez:'Walk-in only'},
+ {n:'188 Cuchifritos',c:'Spanish',area:'Bronx',d:'The Bronx classic. Fried Puerto Rican everything under fluorescent lights and decades of pride.',h:['Cuchifritos','Alcapurrias','Pernil'],tags:['Bronx','Puerto Rican','Classic'],prime:'Anytime - open late',rez:'Walk-in only'},
+ {n:'House of Mofongo',c:'Spanish',area:'Washington Heights',d:'Washington Heights. Mofongo done with depth and variety.',h:['Mofongo varieties','Dominican plates','Big group dinner'],tags:['Dominican','Washington Heights','Mofongo'],prime:'Weekend dinner',rez:'Walk-in friendly'},
+ {n:'Limusina',c:'Spanish',area:'Williamsburg',d:'Williamsburg Latin with attitude. Steaks, empanadas, and a cocktail program that runs late - the kind of room that takes the night somewhere.',h:['Latin steaks','Empanadas','Late-hour cocktails'],tags:['Latin','Williamsburg','Late Night'],prime:'Late dinner, Thursday-Saturday',rez:'Recommended',dress:'Smart casual'},
+ {n:'Maya',c:'Brunch',area:'UES',d:"Richard Sandoval's upscale Mexican on the UES. All-you-can-eat food and drink at brunch - tableside guac, long-pour margaritas, and a room that earns the price.",h:['All-you-can-eat brunch','Bottomless margaritas','Tableside guacamole'],tags:['Brunch','Mexican','UES','All You Can Eat'],prime:'Saturday/Sunday brunch - go for all-you-can-eat',rez:'Required for brunch',dress:'Smart casual'},
+ {n:'Blvd Bistro',c:'Brunch',area:'Harlem',d:'Harlem brunch institution. Shrimp and grits done with conviction.',h:['Shrimp and grits','Biscuits','Harlem brunch classics'],tags:['Brunch','Harlem','Soul'],prime:'Sunday brunch - go early',rez:'Recommended'},
+ {n:'Caliente Cab',c:'Brunch',area:'West Village',d:'West Village fixture. Frozen margaritas the size of your head and a patio that earns the wait.',h:['Frozen margaritas','Mexican brunch','Outdoor seating'],tags:['Brunch','West Village','Margaritas'],prime:'Weekend brunch - frozen margaritas',rez:'Walk-in friendly'},
+ {n:'Ippudo',c:'Ramen and Pho',area:'Tonkotsu',d:'A global legend for a reason. Tonkotsu broth that set the standard everyone else is still chasing.',h:['Tonkotsu ramen','Pork buns','Rich broth'],tags:['Ramen','Tonkotsu','Japanese'],prime:'Off-peak - they don\'t take reservations',rez:'Walk-in only - expect waits'},
+ {n:'KUU Ramen',c:'Ramen and Pho',area:'Reliable',d:'Solid, comforting, no theatrics. The bowl you order when you just want it done right.',h:['Classic ramen','Gyoza','Quick comfort meal'],tags:['Ramen','Casual','Reliable'],prime:'Weeknight dinner',rez:'Walk-in friendly'},
+ {n:'Pho Bar',c:'Ramen and Pho',area:'Brooklyn',d:'Brooklyn pho near Atlantic Ave. Clean, deep broth - the kind of bowl that resets a cold day.',h:['Pho bowls','Fresh herbs','Vietnamese comfort'],tags:['Pho','Vietnamese','Brooklyn'],prime:'Cold-day lunch or post-bar reset',rez:'Walk-in'},
+ {n:'Kazunori',c:'Handrolls',area:'Union Square',d:'The gold standard. Sit at the counter, order the set, eat each one the second it lands.',h:['Hand roll sets','Warm rice','Crisp nori'],tags:['Handrolls','Sushi','Counter'],prime:'Off-peak weekday lunch or 9-10pm dinner to skip the line',rez:'Walk-in counter only - expect a wait at peak'},
+ {n:'Sushi Tokoro',c:'Handrolls',area:'Omakase',d:"Quiet, precise, omakase-leaning. The room knows what it's doing.",h:['Omakase-style sushi','Fresh nigiri','Quiet dinner'],tags:['Sushi','Omakase','Japanese'],prime:'Weeknight dinner, omakase seating',rez:'Required - book ahead',dress:'Smart casual'},
+ {n:'Ozakaya',c:'Handrolls',area:'Izakaya',d:'Izakaya-style Japanese small plates. Built for ordering wide and lingering.',h:['Izakaya plates','Sushi rolls','Shareable Japanese dishes'],tags:['Japanese','Izakaya','Small Plates'],prime:'Late dinner Wednesday-Saturday',rez:'Recommended'},
+ {n:"Melba's",c:'Soul',area:'Harlem',d:'The Harlem standard. Chicken and waffles that earned every bit of the reputation.',h:['Chicken and waffles','Soul food classics','Harlem dinner'],tags:['Soul','Harlem','Classic'],prime:'Late dinner Wednesday-Sunday',rez:'Recommended for weekends'},
+ {n:'File Gumbo Bar',c:'Soul',area:'Creole',d:'Specialized, focused, Creole done with conviction.',h:['Gumbo','Creole plates','Seafood flavors'],tags:['Creole','Gumbo','Soul'],prime:'Weekend dinner',rez:'Recommended'},
+ {n:'Africa Kine',c:'Soul',area:'Harlem',d:"Senegalese in Harlem. Thieboudienne, lamb mafé, and a room that's been quietly feeding the diaspora for years.",h:['Thieboudienne','Lamb mafé','Senegalese plates'],tags:['Senegalese','Harlem','Diaspora'],prime:'Weekend dinner',rez:'Walk-in friendly'},
+ {n:'1803',c:'Soul',area:'TriBeCa',d:'Southern soul with downtown polish. Refined plates, deep flavors, the kind of room that respects the tradition while pushing it forward.',h:['Southern entrées','Refined soul classics','Cocktail program'],tags:['Soul','TriBeCa','Southern'],prime:'Weekend dinner',rez:'Recommended',dress:'Smart casual'},
+ {n:"Amy Ruth's",c:'Soul',area:'Harlem',d:"Harlem institution. The menu reads like a love letter - dishes named after civil rights icons. Chicken and waffles done their way.",h:['Chicken and waffles','Smothered pork chops','Sweet potato pie'],tags:['Soul','Harlem','Institution'],prime:'Sunday brunch - go early',rez:'Walk-in - expect a line on Sundays'},
+ {n:'Lowerline',c:'Soul',area:'Brooklyn',d:'New Orleans cooking in Brooklyn. Gumbo, jambalaya, and Creole classics done with serious technique and Louisiana memory.',h:['Gumbo','Jambalaya','Creole shrimp dishes'],tags:['Soul','Creole','Brooklyn','New Orleans'],prime:'Weekend dinner',rez:'Recommended'},
+ {n:'Blue Sky Deli Hajis',c:'Bodegas & Delis',area:'East Harlem',d:'The birthplace of the chopped cheese. A landmark - order it the way it was meant to be made.',h:['Chopped cheese','Bodega sandwiches','NYC landmark bite'],tags:['Bodega','East Harlem','Chopped Cheese']},
+ {n:'Milano Market',c:'Bodegas & Delis',area:'Columbia',d:'The sandwich that fuels the Upper West Side. Massive, high-quality, no nonsense.',h:['Italian sandwiches','Massive heroes','Columbia-area lunch'],tags:['Deli','Columbia','Sandwich']},
+ {n:"Sunny and Annie's Deli",c:'Bodegas & Delis',area:'Alphabet City',d:"Alphabet City institution. Wildly inventive sandwiches with names you'll remember.",h:['Creative sandwiches','Late-night deli energy','Bodega classics'],tags:['Deli','Alphabet City','Sandwich']},
+ {n:'Boro Brine',c:'Bodegas & Delis',area:'Brooklyn',d:'Brooklyn pickle-and-sandwich shop with ambition. Cured meats, deli classics, and the kind of crunch that puts the place on your weekend list.',h:['House pickles','Cured meat sandwiches','Deli sides'],tags:['Deli','Brooklyn','Sandwich']},
+ {n:'Gaonnuri',c:'Korean',area:'K-Town',d:'Breathtaking penthouse views over K-Town. Order Korean barbecue and let the city do the rest.',h:['Korean barbecue','Penthouse views','Group dinner'],tags:['Korean','K-Town','Views'],prime:'Sunset dinner for the view',rez:'Required - book a window seat',dress:'Business casual - no athleisure'},
+ {n:'Barn Joo',c:'Korean',area:'Gastropub',d:'Upscale Korean gastropub. Industrial-chic, well-executed.',h:['Korean small plates','Soju cocktails','Gastropub plates'],tags:['Korean','Gastropub','Drinks'],prime:'Weeknight dinner',rez:'Recommended',dress:'Smart casual'},
+ {n:'Kisa',c:'Korean',area:'Modern',d:'Modern Korean done with focus. Smaller room, sharper menu - feels personal.',h:['Modern Korean plates','Set-menu energy','Focused cooking'],tags:['Korean','Modern','Intimate'],prime:'Weeknight dinner',rez:'Recommended',dress:'Smart casual'},
+ {n:'Soothr',c:'Thai',area:'East Village',d:'East Village. Northern Thai done with real heat - khao soi that should be on the postcard.',h:['Khao soi','Northern Thai dishes','Spicy noodles'],tags:['Thai','East Village','Spicy'],prime:'Late dinner',rez:'Recommended'},
+ {n:'Fish Cheeks',c:'Thai',area:'NoHo',d:'Coconut crab curry that built the reputation. Modern Thai with seafood at the center.',h:['Coconut crab curry','Seafood Thai plates','Family-style dishes'],tags:['Thai','Seafood','NoHo'],prime:'Weeknight dinner',rez:'Required',dress:'Smart casual'},
+ {n:'Thai Diner',c:'Thai',area:'NoLita',d:'NoLita all-day. Diner format, Thai soul. Pancakes and pad see ew in the same room.',h:['Thai diner plates','Pad see ew','Thai tea babka'],tags:['Thai','NoLita','All Day'],prime:'Brunch or late-night',rez:'Walk-in friendly'},
+ {n:'Wayla',c:'Thai',area:'LES',d:'Incredible food and a secret-garden backyard that makes the meal feel like a private affair.',h:['Thai small plates','Backyard seating','Cocktails'],tags:['Thai','LES','Backyard'],prime:'Weekend dinner - request the garden',rez:'Required for garden seating'},
+ {n:'Lum Lum',c:'Thai',area:'Williamsburg',d:'Williamsburg, neon-lit, late-hours energy. Drinks list as serious as the menu.',h:['Thai seafood','Cocktails','Late-night energy'],tags:['Thai','Williamsburg','Drinks'],prime:'After 9pm Thursday-Saturday',rez:'Recommended',dress:'Smart casual'},
+ {n:'Up Thai',c:'Thai',area:'UES',d:'UES neighborhood pick. Reliable, generous, the spot that earns repeat visits.',h:['Pad Thai','Curries','Reliable neighborhood dinner'],tags:['Thai','UES','Reliable'],prime:'Weeknight dinner',rez:'Recommended'},
+ {n:'Mitr Thai',c:'Thai',area:'Astoria',d:'Astoria Thai earning the kind of word-of-mouth that turns first visits into routines. Deeply flavored, generously portioned.',h:['Northern Thai dishes','Curries','Spicy Thai plates'],tags:['Thai','Astoria','Neighborhood'],prime:'Weekend dinner',rez:'Recommended'},
+ {n:'Dim Sum Sam',c:'Chinese',area:'Multi-Location',d:'Modern dim sum that holds its own against the old guard. Walk-in friendly, group-ready, the kind of menu that rewards going wide.',h:['Soup dumplings','Har gow','Modern dim sum plates'],tags:['Chinese','Dim Sum','Group'],prime:'Weekend lunch',rez:'Walk-in friendly'},
+ {n:'Mountain House Flushing',c:'Chinese',area:'Flushing',d:'Yunnan cuisine in Flushing - mushroom hot pot and crossing-the-bridge rice noodles. A regional Chinese experience worth the train ride out.',h:['Yunnan mushroom hot pot','Crossing-the-bridge noodles','Wild mushrooms'],tags:['Chinese','Flushing','Yunnan'],prime:'Weekend lunch or dinner',rez:'Recommended on weekends'},
+ {n:'Jiang Nan',c:'Chinese',area:'Flushing',d:'Shanghainese classics done with serious technique. Soup dumplings, lion\'s head meatballs, and the kind of room you make reservations for.',h:['Soup dumplings (xiao long bao)','Lion\'s head meatballs','Shanghainese specialties'],tags:['Chinese','Flushing','Shanghainese'],prime:'Weekend dinner',rez:'Required',dress:'Smart casual'},
+ {n:'Antidote',c:'Chinese',area:'Flatiron',d:'Modern Chinese in the Flatiron. Sleek room, sharp menu - the upscale Chinese dinner for downtown nights.',h:['Modern Chinese plates','Cocktail program','Date-night dining'],tags:['Chinese','Flatiron','Modern'],prime:'Weeknight dinner',rez:'Recommended',dress:'Smart casual'},
+ {n:'CHELI 浙里',c:'Chinese',area:'Flushing',d:'Zhejiang regional cuisine in Flushing. Specialties from a region most NYC menus skip - drunken chicken, Hangzhou-style fish, deep flavors.',h:['Drunken chicken','Hangzhou-style fish','Zhejiang specialties'],tags:['Chinese','Flushing','Zhejiang'],prime:'Weekend dinner',rez:'Recommended'},
+ {n:'The Best Sichuan 21 一品成都',c:'Chinese',area:'Flushing',d:'Flushing Sichuan that earns the name. Numbing-hot mapo tofu, dan dan noodles, and chili oil that takes the day with it.',h:['Mapo tofu','Dan dan noodles','Sichuan classics'],tags:['Chinese','Flushing','Sichuan','Spicy'],prime:'Lunch or weeknight dinner',rez:'Walk-in friendly'},
+ {n:'Chi Restaurant & Bar',c:'Chinese',area:'Chelsea',d:'Modern Chinese with a serious bar program. Dim sum, dumplings, and cocktails worth lingering over.',h:['Dim sum','Dumplings','Cocktail program'],tags:['Chinese','Chelsea','Modern'],prime:'Weeknight dinner or weekend cocktail hour',rez:'Recommended',dress:'Smart casual'},
+ {n:'Moon Kee',c:'Chinese',area:'UWS',d:'Upper West Side hot pot specialist. Tabletop broth, deep ingredient list, the kind of dinner that turns into a long night - without the trek out to Flushing.',h:['Hot pot','Broth selection','Specialty meats and vegetables'],tags:['Chinese','UWS','Hot Pot'],prime:'Cold-weather group dinner',rez:'Recommended for groups'},
+ {n:'Adda',c:'Indian',area:'LIC',d:'LIC regional Indian. Goat brain masala, lamb chops, biryanis with serious depth - the menu reads like a love letter to home cooking.',h:['Goat brain masala','Lamb chops','Biryani'],tags:['Indian','LIC','Regional'],prime:'Weekend dinner',rez:'Required - book weeks ahead',dress:'Smart casual',website:'https://www.addanyc.com/'},
+ {n:'Semma',c:'Indian',area:'West Village',d:'Michelin-starred South Indian. Chef Vijay Kumar cooking the food of his Tamil Nadu childhood - gunpowder dosa, snail biryani, the kind of menu that rewrites what people think Indian food can be.',h:['Gunpowder dosa','Snail biryani','Tamil regional dishes'],tags:['Indian','West Village','Michelin','South Indian'],prime:'Weeknight dinner',rez:'<strong>Required - book 4 weeks out</strong> via Resy',dress:'Smart casual'},
+ {n:'Spice Symphony Times Square',c:'Indian',area:'Times Square',d:'Indo-Chinese done with conviction. Crispy lotus stem, chili paneer, manchurian - the cross-cuisine tradition most NYC menus skip.',h:['Chili paneer','Crispy lotus stem','Indo-Chinese specialties'],tags:['Indian','Indo-Chinese','Times Square'],prime:'Pre-theatre dinner',rez:'Recommended'},
+ {n:'Cloves Indian Cuisine',c:'Indian',area:'Midtown',d:'Midtown neighborhood Indian that earns repeat visits. Generous portions, deep flavors, no theatrics - the reliable answer when you need it.',h:['Tikka masala','Biryani','Naan and curries'],tags:['Indian','Midtown','Reliable'],prime:'Weeknight dinner',rez:'Walk-in friendly'},
+ {n:'Angel Indian Restaurant',c:'Indian',area:'East Village',d:'East Village classic. Old-school Indian on Curry Row done with the patience of a place that has nothing to prove.',h:['Vindaloo','Naan basket','Classic curries'],tags:['Indian','East Village','Classic'],prime:'Weeknight dinner',rez:'Walk-in friendly'},
+ {n:'Patiala Indian Grill & Bar',c:'Indian',area:'Midtown',d:'Punjabi grill with a bar program to match. Tandoori meats, butter chicken, and a room built for after-work dinners that turn into nights.',h:['Tandoori meats','Butter chicken','Cocktail program'],tags:['Indian','Punjabi','Midtown'],prime:'Late dinner Thursday-Saturday',rez:'Recommended',dress:'Smart casual'},
+ {n:'Bombay Chowk',c:'Indian',area:'Multi-Location',d:'Mumbai street food done right. Pav bhaji, vada pav, chaat - the kind of casual menu that turns a quick stop into a full meal.',h:['Pav bhaji','Vada pav','Chaat'],tags:['Indian','Street Food','Mumbai'],prime:'Lunch or quick dinner',rez:'Walk-in'},
+ {n:'Ambrosia Garden',c:'Mediterranean',area:'Astoria',d:'Astoria Greek with garden seating. Whole fish, slow-cooked classics, and the kind of porch energy that turns dinner into a long night.',h:['Whole fish','Garden dining','Slow-cooked Greek classics'],tags:['Greek','Astoria','Garden'],prime:'Warm-weather dinner for the garden',rez:'Recommended'},
+ {n:'Taverna Kyklades',c:'Mediterranean',area:'Astoria',d:'Astoria seafood institution. The whole grilled fish that built the reputation - fresh, simple, charred over fire. Worth the wait, and there will be one.',h:['Whole grilled fish','Octopus','Greek mezze'],tags:['Greek','Astoria','Seafood'],prime:'Weeknight - weekend waits get long',rez:'Walk-in only - expect waits on weekends'},
+ {n:'Bahari Estiatorio',c:'Mediterranean',area:'Astoria',d:'Astoria taverna doing the classics with patience. Mageiremata (slow-cooked Greek home dishes), grilled fish, and a room that feels like Sunday in Athens.',h:['Mageiremata home-style dishes','Grilled fish','Greek desserts'],tags:['Greek','Astoria','Taverna'],prime:'Sunday lunch for the home-cooked classics',rez:'Recommended'},
+ {n:'Agnanti',
+  c:'Mediterranean',area:'Astoria',d:'Astoria Greek with a view of the park. Regional Greek menu - Macedonian and Asia Minor specialties most NYC tavernas skip.',h:['Macedonian regional dishes','Lamb','Garden seating'],tags:['Greek','Astoria','Regional']},
+ {n:'Aliada',c:'Mediterranean',area:'Astoria',d:'Astoria neighborhood Greek-Cypriot. Charcoal-grilled meats, fresh seafood, and a room that takes its lane seriously.',h:['Charcoal-grilled meats','Greek-Cypriot specialties','Fresh seafood'],tags:['Greek','Cypriot','Astoria'],prime:'Weekend dinner',rez:'Recommended'},
+ {n:'Delos Greek Restaurant',c:'Mediterranean',area:'Astoria',d:'Honest taverna fare. Grilled octopus, lamb done right, no need to overthink the order.',h:['Grilled octopus','Lamb dishes','Greek mezze'],tags:['Greek','Mediterranean','Taverna'],prime:'Weeknight dinner',rez:'Recommended'},
+ {n:"Kiki's Greek",c:'Mediterranean',area:'LES',d:'Cash-only LES institution. Loud room, real food, the kind of wait that earns itself.',h:['Greek spreads','Grilled meats','LES group dinner'],tags:['Greek','LES','Institution'],prime:'Weeknight to avoid the line',rez:'Walk-in only - cash only, long waits on weekends'},
+ {n:'Loukoumi Taverna',c:'Mediterranean',area:'Astoria',d:'Astoria roots, garden seating in season. Whole fish, mezze, and a room that knows its lane.',h:['Whole fish','Greek mezze','Garden seating'],tags:['Greek','Astoria','Seafood'],prime:'Warm-weather dinner for the garden',rez:'Recommended'},
+ {n:'AMAVI',c:'Mediterranean',area:'Murray Hill',d:'Murray Hill, wood-fired, hand-pulled pasta. Coastal Italian energy.',h:['Wood-fired dishes','Hand-pulled pasta','Coastal Italian plates'],tags:['Italian','Murray Hill','Pasta'],prime:'Weeknight dinner',rez:'Recommended',dress:'Smart casual'},
+ {n:'LALYN',c:'Mediterranean',area:'Midtown',d:'Midtown Turkish-Mediterranean with polish. Mezze done generously, kebabs cooked over real fire, the kind of room that earns a return visit.',h:['Turkish mezze','Wood-fire kebabs','Mediterranean wines'],tags:['Mediterranean','Turkish','Midtown'],prime:'Weeknight dinner',rez:'Recommended',dress:'Smart casual'},
+ {n:'Motek Flatiron',c:'Mediterranean',area:'Flatiron',d:'Modern Israeli in the Flatiron. Hummus, shakshuka, lamb skewers - bright Mediterranean energy with a polished room.',h:['Hummus and pita','Shakshuka','Lamb skewers'],tags:['Mediterranean','Israeli','Flatiron'],prime:'Weekend brunch or weeknight dinner',rez:'Recommended'},
+ {n:"Or'Esh",c:'Mediterranean',area:'Brooklyn',d:'Middle Eastern bakery roots. The bread alone is worth the trip - pillowy, hot, layered with everything else on the menu.',h:['Fresh-baked bread','Middle Eastern dips','Bakery program'],tags:['Mediterranean','Middle Eastern','Bakery'],prime:'Morning or early lunch',rez:'Walk-in'},
+ {n:'Ilili NoMad',c:'Mediterranean',area:'NoMad',d:'NoMad Lebanese done at scale. Wood-fired flatbreads, mezze meant to be shared wide, a dining room built for special occasions.',h:['Brussels sprouts','Wood-fired flatbreads','Lebanese mezze'],tags:['Mediterranean','Lebanese','NoMad'],prime:'Weekend dinner - group-friendly',rez:'Required for groups',dress:'Business casual - no athleisure'},
+ {n:'La Lanterna di Vittorio',c:'Italian',area:'Village',d:'Village landmark. Candlelit, garden out back, the kind of room that turns a Tuesday into something.',h:['Pasta','Garden seating','Italian desserts'],tags:['Italian','Village','Candlelit'],prime:'Date-night dinner',rez:'Recommended - request garden',dress:'Smart casual'},
+ {n:"Carmine's",c:'Italian',area:'Times Square',d:"Family-style portions that are part of the city's mythology. Bring people.",h:['Family-style pasta','Chicken parm','Large group dinner'],tags:['Italian','Times Square','Group'],prime:'Weekend group dinner',rez:'Required for groups of 4+'},
+ {n:"Randazzo's Clam Bar",c:'Italian',area:'Sheepshead Bay',d:"Sheepshead Bay institution. Red sauce, fried clams, and a Brooklyn-Italian energy that hasn't been updated and doesn't need to be.",h:['Fried clams','Linguine with red sauce','Old-school Brooklyn'],tags:['Italian','Brooklyn','Seafood'],prime:'Weekend lunch or early dinner',rez:'Walk-in'},
+ {n:'Giulietta',c:'Italian',area:'Brooklyn',d:'Brooklyn regional Italian. Pasta program with serious depth - the kind of menu that rewards going beyond your usual order.',h:['Regional pasta','Wood-fire dishes','Italian wine list'],tags:['Italian','Brooklyn','Pasta'],prime:'Weekend dinner',rez:'Recommended',dress:'Smart casual'},
+ {n:'Torrisi',c:'Italian',area:'NoLita',d:'Major Food Group flagship. NoLita Italian-American with serious ambition - pasta, antipasti, and a dining room that rewards dressing for it.',h:['Tortellini in brodo','Chicken alla Romana','Antipasti spread'],tags:['Italian','NoLita','Special Occasion'],prime:'Date-night or special-occasion dinner',rez:'<strong>Required - book 2-4 weeks out</strong> via Resy',dress:'Smart casual - jackets common, not required'},
+ {n:'Trattoria Trecolori',c:'Italian',area:'Times Square',d:'Times Square Italian that punches above its zip code. Hand-rolled pasta, real bottles of wine, the kind of room that locals book before shows.',h:['Hand-rolled pasta','Veal dishes','Italian wine by the glass'],tags:['Italian','Times Square','Pre-Theatre'],prime:'Pre-theatre dinner, 5:30-7pm',rez:'Required pre-theatre',dress:'Smart casual'},
+ {n:'Anixi',c:'Vegan',area:'Mediterranean',d:'Mediterranean, lush, high-end. Feels like an upgrade, not a compromise.',h:['Vegan Mediterranean plates','Mezze','Upscale plant-based dinner'],tags:['Vegan','Mediterranean','Upscale'],prime:'Tuesday-Saturday dinner, 7-9pm',rez:'Recommended on weekends',dress:'Smart casual'},
+ {n:'Planta',c:'Vegan',area:'Modern',d:"Polished, design-forward, group-friendly. The plant-based dinner that doesn't feel like a sacrifice.",h:['Plant-based sushi','Truffle noodles','Group-friendly vegan dishes'],tags:['Vegan','Modern','Group'],prime:'Weeknight dinner',rez:'Recommended',dress:'Smart casual'},
+ {n:'Coletta',c:'Vegan',area:'Murray Hill',d:'Murray Hill vegan Italian. Cacio e pepe, lasagna, pasta that holds up against the real thing.',h:['Vegan pasta','Cacio e pepe','Plant-based Italian'],tags:['Vegan','Italian','Murray Hill'],prime:'Weeknight dinner',rez:'Recommended'},
+ {n:'Ras Plant Based',c:'Vegan',area:'Crown Heights',d:'Crown Heights Ethiopian, fully vegan. Injera, shiro, gomen - bold, communal, eaten with your hands.',h:['Injera platters','Shiro','Ethiopian vegan dishes'],tags:['Vegan','Ethiopian','Crown Heights'],prime:'Weekend dinner - group-friendly',rez:'Recommended for groups'},
+ {n:'Massawa',c:'Vegan',area:'Morningside Heights',d:'Morningside Heights Eritrean. Vegan combo platter is the move.',h:['Vegan combo platter','Injera','Eritrean classics'],tags:['Vegan','Eritrean','Columbia'],prime:'Weekend lunch or dinner',rez:'Walk-in friendly'},
+ {n:'Bunna Cafe',c:'Vegan',area:'Bushwick',d:'Bushwick fully vegan Ethiopian. Communal plates eaten with injera by hand - coffee ceremony if you stick around long enough.',h:['Vegan injera platters','Ethiopian coffee ceremony','Communal dining'],tags:['Vegan','Ethiopian','Bushwick'],prime:'Weekend dinner - communal table',rez:'Walk-in or call ahead'},
+ {n:'Spicy Moon',c:'Vegan',area:'Sichuan',d:"Vegan Sichuan that doesn't apologize. Mapo tofu, dan dan noodles, real heat.",h:['Dan dan noodles','Mapo tofu','Vegan Sichuan heat'],tags:['Vegan','Sichuan','Spicy'],prime:'Weeknight dinner',rez:'Walk-in friendly'},
+ {n:'Willow Vegan Bistro',c:'Vegan',area:'Chelsea',d:'Sophisticated comfort food. Chelsea regular - plant-based done with patience and care.',h:['Vegan comfort plates','Chelsea neighborhood spot','Sophisticated plant-based'],tags:['Vegan','Chelsea','Bistro'],prime:'Weeknight dinner',rez:'Recommended'},
+ {n:'Koronet Pizza',c:'Pizza',area:'Columbia',d:"Columbia's monster slice. Twice the size of your face, no questions asked.",h:['Giant slices','Late-night pizza','Columbia classic'],tags:['Pizza','Columbia','Slice'],prime:'Late-night slice run',rez:'Walk-in counter'},
+ {n:'Cuts and Slices',c:'Pizza',area:'Brooklyn',d:'Brooklyn slice shop with a cult following. The kind of pizza you order again before you finish the first one.',h:['Specialty slices','Brooklyn pizza','Creative toppings'],tags:['Pizza','Brooklyn','Slice']},
+ {n:'Hooda Grill',c:'Street Carts',area:'Columbia',d:'The Columbia cart. Chicken and rice that built a following one lunch rush at a time.',h:['Chicken over rice','White sauce','Campus lunch'],tags:['Halal','Cart','Columbia'],prime:'Weekday lunch rush',rez:'Walk-in cart - cash preferred'},
+ {n:"Adel's Famous Halal",c:'Street Carts',area:'Halal Cart',d:'Famous for a reason. The platter does what a halal platter is supposed to do.',h:['Chicken over rice','Combo platter','Late-night halal'],tags:['Halal','Cart','Midtown'],prime:'Late-night cart',rez:'Walk-in only - cash'},
+ {n:'Dominique Ansel Bakery',c:'Dessert',area:'SoHo',d:'The Cronut house. SoHo institution - but order beyond the icon.',h:['Cronut','DKA pastry','Seasonal desserts'],tags:['Dessert','SoHo','Bakery'],prime:'Weekday morning for Cronut availability',rez:'Walk-in - Cronuts sell out by midday'},
+ {n:'Spot Dessert Bar',c:'Dessert',area:'Tapas-Style',d:'The Potted Plant. Innovative tapas-style sweets. Photogenic and earned.',h:['Potted Plant dessert','Dessert tapas','Matcha sweets'],tags:['Dessert','Creative','Cafe'],prime:'After dinner',rez:'Walk-in friendly'},
+ {n:'Maiko Matcha Cafe',c:'Dessert',area:'Matcha',d:'High-grade matcha. The soft serve is the move.',h:['Matcha soft serve','Matcha lattes','Japanese sweets'],tags:['Dessert','Matcha','Cafe'],prime:'Afternoon',rez:'Walk-in'},
+ {n:'Anita Gelato',c:'Dessert',area:'UES',d:'Artisan Italian gelato with a rotating flavor wall that makes ordering hard in the best way. The UES walk-up worth planning around.',h:['Artisan gelato','Rotating seasonal flavors','Italian sorbet'],tags:['Dessert','Gelato','UES'],prime:'After dinner or weekend afternoons',rez:'Walk-in only'},
+ {n:'Chelsea Market',c:'Food Halls',area:'Chelsea',d:'The classic. Tourist-meets-local powerhouse, and it still delivers.',h:['Multi-vendor food hall','Tacos, seafood, sweets','Chelsea walking route'],tags:['Food Hall','Chelsea','Group'],prime:'Weekday lunch - weekends mob',rez:'Walk-in'},
+ {n:'Time Out Market New York',c:'Food Halls',area:'DUMBO',d:"Brooklyn's best gathered under one roof, with a view that does half the work.",h:['Food hall vendors','Rooftop views','Group-friendly dinner'],tags:['Food Hall','DUMBO','Views'],prime:'Weekend afternoons or sunset for the skyline',rez:'Walk-in food hall'},
+ {n:'Tao Downtown',c:'Chelsea & Highline',area:'Showstopper',d:'The titan of NYC vibe dining. Massive, moody, and always a performance.',h:['Pan-Asian plates','Large-format dining','High-energy room'],tags:['Chelsea','Vibe Dining','Group'],prime:'Friday/Saturday dinner',rez:'<strong>Required</strong> - book 2+ weeks ahead',dress:'Smart casual - no athleisure or sneakers'},
+ {n:'Buddakan',c:'Chelsea & Highline',area:'Chelsea',d:'Pan-Asian theater. The dining room that still draws a crowd worth dressing for.',h:['Edamame dumplings','Pan-Asian sharing plates','Dramatic dining room'],tags:['Chelsea','Pan-Asian','Big Night'],prime:'Weekend dinner',rez:'<strong>Required</strong>',dress:'Smart casual - dress up'},
+ {n:'Catch NYC',c:'Chelsea & Highline',area:'Rooftop',d:'High-energy seafood with a rooftop. Loud in the right way.',h:['Seafood towers','Sushi rolls','Rooftop drinks'],tags:['Seafood','Rooftop','Chelsea'],prime:'Friday/Saturday dinner',rez:'<strong>Required</strong>',dress:'Smart casual - no athleisure'},
+ {n:'Charles Pan Fried Chicken',c:'Soul',area:'Harlem',d:'Harlem institution. Pan-fried chicken with a crust that earns the legend. Order the whole bird.',h:['Pan-fried chicken','Southern sides','Harlem classic'],tags:['Chicken','Harlem','Soul'],prime:'Lunch or early dinner',rez:'Walk-in counter'},
+ {n:'Cocodaq',c:'Korean',area:'Midtown',d:'Korean-style wings done with precision. Crispy, sauced, and gone faster than you planned.',h:['Korean fried wings','Crispy skin','Dipping sauces'],tags:['Wings','Korean','Midtown'],prime:'After-work weeknight',rez:'Walk-in friendly'},
+ {n:'Koko Wings',c:'Korean',area:'Multi-Location',d:'Sticky, crispy, layered. The kind of wings that ruin all other wings for a while.',h:['Signature glazed wings','Spicy options','Group shareable'],tags:['Wings','Korean','Crispy'],prime:'Late-night group dinner',rez:'Walk-in'},
+ {n:'Mēdüzā Mediterrania New York',c:'Mediterranean',area:'Meatpacking',d:'Fine-dining Mediterranean on Hudson St. High-energy room, live music, group-ready menu - the showstopper Mediterranean dinner in the Chelsea/Meatpacking corridor.',h:['Wagyu carpaccio','Lamb chops','Mediterranean tasting menu'],tags:['Mediterranean','Meatpacking','Fine Dining'],prime:'Weekend dinner',rez:'<strong>Required</strong> - book on Resy or OpenTable',dress:'Smart casual - dress up',website:'https://www.meduza33.com/'},
+ {n:'Sei Less',c:'Chelsea & Highline',area:'Chelsea',d:'The room that built its own mythology. High-design, high-energy, the night out people plan around.',h:['Pan-Asian sharing plates','High-design room','Cocktails'],tags:['Chelsea','Vibe Dining','Design']},
+ {n:'Fushimi Times Square',c:'Handrolls',area:'Times Square',d:'Sushi above the noise. Japanese-Korean fusion with a view that makes it worth the address.',h:['Sushi rolls','Japanese-Korean fusion','Times Square views'],tags:['Sushi','Times Square','Fusion']},
+ {n:"L'Industrie Pizza",c:'Pizza',area:'Williamsburg',d:'The slice that made Williamsburg a pilgrimage. Burrata and vodka sauce on impossibly thin crust.',h:['Burrata slice','Vodka sauce','Williamsburg classic'],tags:['Pizza','Williamsburg','Slice'],prime:'Off-peak hours to skip the line',rez:'Walk-in counter - expect a line'},
+ {n:"Mama's Too",c:'Pizza',area:'UWS',d:'UWS cult pizza. Square slices, creative toppings, the kind of shop that builds a neighborhood around itself.',h:['Square slices','Creative toppings','UWS lunch classic'],tags:['Pizza','UWS','Square Slice'],prime:'Weekday lunch',rez:'Walk-in counter'},
+ {n:'Lucali',c:'Pizza',area:'Carroll Gardens',d:'The Brooklyn pizza pilgrimage. Mark Iacono\'s candlelit, BYOB, cash-only pizzeria - wafer-thin crust, three cheeses, fresh basil. The line forms at 2pm.',h:['Plain pie (the move)','Calzone','BYOB - bring the wine'],tags:['Pizza','Brooklyn','Iconic','BYOB'],prime:'Get in line at 2pm for the early seating, or 5pm for late',rez:'<strong>No reservations</strong> - cash only, BYOB, line up early',website:'https://www.lucali.com/'},
+ {n:"John's of Bleecker Street",c:'Pizza',area:'West Village',d:'Coal-fired brick oven pizza since 1929. No slices, whole pies only. Graffiti-carved wooden booths, an oven that started it all - the original New York coal-fired pie.',h:['Coal-fired pie','Meatball pizza','No slices - order a whole pie'],tags:['Pizza','West Village','Coal-Fired','Classic'],prime:'Early dinner or late lunch - lines build fast',rez:'No reservations - walk-in only',website:'https://johnsofbleecker.com/'},
+ {n:"Scarr's Pizza",c:'Pizza',area:'LES',d:'Scarr Pimentel\'s LES slice shop. They mill their own flour in the basement - natural ingredients, organic wines, retro pizzeria-meets-bar vibe. Vegan slice is no joke either.',h:['Pepperoni and jalapeño slice','Sicilian square','Vegan pizza'],tags:['Pizza','LES','Slice','Natural Wine'],prime:'Off-peak hours to skip the line',rez:'Walk-in slice counter - takes reservations for back room',website:'https://www.scarrspizza.com/'},
+ {n:'Smorgasburg',c:'Food Events',area:'Williamsburg / Prospect Park',d:"The country's biggest open-air food market. Saturdays in Williamsburg, Sundays in Prospect Park (April-October). Show up hungry and bring cash.",h:['100+ food vendors','Saturdays Williamsburg','Sundays Prospect Park'],tags:['Festival','Brooklyn','Weekend','Seasonal'],prime:'Saturday Williamsburg, Sunday Prospect Park - go early',rez:'Open-air, walk-in - bring cash'},
+ {n:'Japan Fes',c:'Food Events',area:'Various - Multi-Borough',d:'The largest Japanese food festival in the US. Travels through Manhattan, Brooklyn, and Queens neighborhoods most weekends in season. Takoyaki, yakitori, taiyaki, the full spread.',h:['Takoyaki and yakitori','Traveling weekend festival','Authentic Japanese street food'],tags:['Festival','Japanese','Weekend','Seasonal'],prime:'Check schedule - varies by weekend',rez:'Open-air festival'},
+ {n:'San Gennaro Festival',c:'Food Events',area:'Little Italy',d:"Little Italy's 11-day September street fair - running since 1926. Sausage and peppers, zeppoles, cannoli, and a crowd that takes the religious roots seriously.",h:['Sausage and peppers','Zeppoles and cannoli','September Little Italy tradition'],tags:['Festival','Italian','Little Italy','September'],prime:'September, 11-day window - weekends busiest',rez:'Open-air festival'}
+];
+
+const categories = ['All', ...Array.from(new Set(restaurants.map(r=>r.c)))];
+const chapterIndex = document.getElementById('chapterIndex');
+const sectionsEl = document.getElementById('sections');
+const searchInput = document.getElementById('searchInput');
+const empty = document.getElementById('empty');
+let activeCategory = 'All';
+let currentObserver = null;
+
+function q(str){return encodeURIComponent(str);}
+function placeQuery(r){return [r.n, r.area, 'New York NY'].filter(Boolean).join(' ').trim();}
+function linkFor(r, type){
+  const query = q(placeQuery(r));
+  if(type==='directions') return `https://www.google.com/maps/dir/?api=1&destination=${query}`;
+  return `https://www.google.com/maps/search/?api=1&query=${query}`;
+}
+function mapSrc(r){return `https://www.google.com/maps?q=${q(placeQuery(r))}&output=embed`;}
+function setOptionalLink(id, url){
+  // Deprecated - kept for safety. Use direct href assignment instead.
+}
+
+function renderIndex(groups){
+  const links = groups.map(([cat, items], i)=>`<button class="chapter-link ${i===0?'active':''}" data-target="${cat.toLowerCase().replaceAll(' ','-').replaceAll('&','and')}">${String(i+1).padStart(2,'0')} · ${cat}</button>`).join('');
+  chapterIndex.innerHTML = `<div class="chapter-kicker">Chapters</div>${links}`;
+  chapterIndex.querySelectorAll('.chapter-link').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const target = document.getElementById(btn.dataset.target);
+      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+}
+
+function watchSections(){
+  if(currentObserver) currentObserver.disconnect();
+  const links = [...document.querySelectorAll('.chapter-link')];
+  currentObserver = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        links.forEach(l=>l.classList.toggle('active', l.dataset.target === entry.target.id));
+      }
+    });
+  },{rootMargin:'-34% 0px -58% 0px',threshold:0});
+  document.querySelectorAll('.section').forEach(sec=>currentObserver.observe(sec));
+}
+
+function match(r){
+  const term = searchInput.value.trim().toLowerCase();
+  const catOK = activeCategory==='All' || r.c===activeCategory;
+  const text = [r.n,r.c,r.area,r.d,...r.tags,...r.h].join(' ').toLowerCase();
+  return catOK && (!term || text.includes(term));
+}
+
+function render(){
+  const filtered = restaurants.filter(match);
+  const grouped = new Map();
+  filtered.forEach((r)=>{ if(!grouped.has(r.c)) grouped.set(r.c,[]); grouped.get(r.c).push(r); });
+
+  const preferredOrder = [
+    'Favorites',
+    'After Work',
+    'Happy Hour',
+    'Tacos',
+    'Vegan',
+    'Spanish',
+    'Brunch',
+    'Ramen and Pho',
+    'Handrolls',
+    'Soul',
+    'Bodegas & Delis',
+    'Korean',
+    'Thai',
+    'Chinese',
+    'Indian',
+    'Mediterranean',
+    'Italian',
+    'Pizza',
+    'Street Carts',
+    'Dessert',
+    'Food Halls',
+    'Chelsea & Highline',
+    'Food Events'
+  ];
+
+  const orderedGroups = preferredOrder
+    .filter(cat => grouped.has(cat))
+    .map(cat => [cat, grouped.get(cat)]);
+
+  sectionsEl.innerHTML = '';
+  renderIndex(orderedGroups);
+  let idx = 1;
+  orderedGroups.forEach(([cat, items])=>{
+    const sec = document.createElement('section');
+    sec.className = 'section';
+    sec.id = cat.toLowerCase().replaceAll(' ','-').replaceAll('&','and');
+    sec.innerHTML = `
+      <div class="section-head">
+        <div class="section-num">${String(idx).padStart(2,'0')} / ${grouped.size}</div>
+        <div><h2>${cat}</h2><p class="section-note">${items.length} ${items.length===1?'spot':'spots'} - select a tile for menu, website, directions, and map.</p></div>
+      </div>
+      <div class="tile-grid">
+        ${items.map((r)=>tileHTML(r, restaurants.indexOf(r)+1)).join('')}
+      </div>`;
+    sectionsEl.appendChild(sec); idx++;
+  });
+  empty.style.display = filtered.length ? 'none' : 'block';
+  document.querySelectorAll('.tile').forEach((t,i)=>{t.style.animationDelay = Math.min(i * 0.025, .35) + 's'; t.addEventListener('click',()=>openPanel(restaurants[Number(t.dataset.index)]));});
+  watchSections();
+}
+
+function tileBullets(r){
+  const data = TRANSIT[r.n];
+  if(!data) return '';
+  const lines = data.stops[0].lines;
+  const bullets = lines.map((l,li)=>{
+    const bg = LINE_COLORS[l]||'#555';
+    const tc = ['N','Q','R','W'].includes(l)?'#000':'#fff';
+    return `<span class="mta-bullet mta-bullet-sm" style="background:${bg};color:${tc}">${l}</span>`;
+  }).join('');
+  return `<div class="tile-transit">${bullets}<span class="tile-transit-walk">${data.stops[0].walk}</span></div>`;
+}
+
+function tileHTML(r,num){
+  const i = restaurants.indexOf(r);
+  return `<button class="tile" data-index="${i}">
+    <div class="tile-top"><span class="tile-num">${String(num).padStart(3,'0')}</span><span class="tile-neighborhood">${r.area}</span></div>
+    <h3>${r.n}</h3>
+    <p>${r.d}</p>
+    <div class="tile-bottom-row">
+      <div class="tag-row">${r.tags.slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      ${tileBullets(r)}
+    </div>
+  </button>`;
+}
+
+const panel = document.getElementById('panel');
+const overlay = document.getElementById('overlay');
+const closePanel = document.getElementById('closePanel');
+function openPanel(r){
+  document.getElementById('panelKicker').textContent = `${r.c} / ${r.area}`;
+  document.getElementById('panelTitle').textContent = r.n;
+  document.getElementById('panelDesc').textContent = r.d;
+  document.getElementById('panelTags').innerHTML = r.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+  document.getElementById('panelHighlights').innerHTML = r.h.map(x=>`<li>${x}</li>`).join('');
+
+  // Plan the Visit block - only shows rows with data
+  const planBlock = document.getElementById('planBlock');
+  const planRows = document.getElementById('planRows');
+  const planData = [
+    { label:'Prime Time',  value:r.prime },
+    { label:'Reservations', value:r.rez },
+    { label:'Dress Code',   value:r.dress },
+  ].filter(p => p.value && p.value.trim());
+  if (planData.length) {
+    planRows.innerHTML = planData.map(p =>
+      `<div class="plan-row"><div class="plan-row-label">${p.label}</div><div class="plan-row-value">${p.value}</div></div>`
+    ).join('');
+    planBlock.style.display = '';
+  } else {
+    planBlock.style.display = 'none';
+  }
+
+  // Website / Menu link: use restaurant's own URL if available, otherwise open Google Maps
+  // (Maps reliably surfaces the official website, phone, hours, and current address)
+  const websiteEl = document.getElementById('websiteLink');
+  if (r.website || r.menu) {
+    websiteEl.href = r.website || r.menu;
+  } else {
+    websiteEl.href = `https://www.google.com/maps/search/${q(placeQuery(r))}`;
+  }
+  document.getElementById('directionsLink').href = linkFor(r,'directions');
+  document.getElementById('mapFrame').src = mapSrc(r);
+  // Reset transit to loading state then render
+  document.getElementById('transitContent').innerHTML = `<span class="transit-spinner"></span><span class="transit-loading-text">Finding nearest subway…</span>`;
+  setTimeout(() => renderTransit(r), 120);
+  panel.classList.add('open'); overlay.classList.add('open'); document.body.classList.add('lock'); panel.setAttribute('aria-hidden','false');
+}
+function close(){panel.classList.remove('open'); overlay.classList.remove('open'); document.body.classList.remove('lock'); panel.setAttribute('aria-hidden','true');}
+closePanel.addEventListener('click',close); overlay.addEventListener('click',close); window.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+searchInput.addEventListener('input',render);
+
+window.addEventListener('scroll',()=>{
+ const h=document.documentElement.scrollHeight-window.innerHeight;
+ document.getElementById('progress').style.width=((window.scrollY/h)*100)+'%';
+},{passive:true});
+
+// ── MTA Transit Data ──────────────────────────────────────────────
+// Each entry: { stops: [ { name, lines[], walk } ], note? }
+// lines use MTA bullet colors; walk = "X min walk"
+const TRANSIT = {
+  // After Work
+  'Felice 56':         { stops:[{name:'51 St',lines:['6'],walk:'2 min'},{name:'Lexington Av/53 St',lines:['E','M'],walk:'4 min'}] },
+  'Sugar Monk':        { stops:[{name:'137 St-City College',lines:['1'],walk:'4 min'},{name:'135 St',lines:['B','C'],walk:'6 min'}] },
+  'Debajo':            { stops:[{name:'2 Av',lines:['F'],walk:'3 min'},{name:'Delancey St',lines:['J','M','Z'],walk:'5 min'}] },
+  'Yuca Bar':          { stops:[{name:'1 Av',lines:['L'],walk:'4 min'},{name:'2 Av',lines:['F'],walk:'5 min'}] },
+  'Tomi Jazz':         { stops:[{name:'Lexington Av/53 St',lines:['E','M'],walk:'3 min'},{name:'51 St',lines:['6'],walk:'4 min'}] },
+  'Mezcali':           { stops:[{name:'Fulton St',lines:['2','3','4','5','A','C','J','Z'],walk:'4 min'},{name:'Wall St',lines:['2','3'],walk:'5 min'}] },
+  'Lolita':            { stops:[{name:'Delancey St-Essex St',lines:['F','J','M','Z'],walk:'4 min'},{name:'2 Av',lines:['F'],walk:'5 min'}] },
+  'Amélie West Village': { stops:[{name:'Christopher St',lines:['1'],walk:'3 min'},{name:'W 4 St',lines:['A','B','C','D','E','F','M'],walk:'5 min'}] },
+  'LELABAR':           { stops:[{name:'14 St',lines:['1','2','3'],walk:'4 min'},{name:'8 Av',lines:['L'],walk:'5 min'}] },
+  'Leyla':             { stops:[{name:'Christopher St',lines:['1'],walk:'4 min'},{name:'W 4 St',lines:['A','B','C','D','E','F','M'],walk:'6 min'}] },
+  'Verlaine':          { stops:[{name:'2 Av',lines:['F'],walk:'3 min'},{name:'Delancey St-Essex St',lines:['F','J','M','Z'],walk:'5 min'}] },
+  // Tacos
+  'Los Tacos No. 1':   { stops:[{name:'23 St',lines:['C','E'],walk:'3 min'},{name:'14 St',lines:['A','C','E'],walk:'5 min'}], note:'Inside Chelsea Market' },
+  'Birria LES':        { stops:[{name:'Delancey St',lines:['J','M','Z'],walk:'4 min'},{name:'Essex St',lines:['F'],walk:'4 min'}] },
+  'Esse Taco':         { stops:[{name:'Spring St',lines:['C','E'],walk:'4 min'},{name:'Prince St',lines:['N','R','W'],walk:'5 min'}] },
+  'Tacombi':           { stops:[{name:'Prince St',lines:['N','R','W'],walk:'3 min'},{name:'Broadway-Lafayette',lines:['B','D','F','M'],walk:'4 min'}] },
+  'Taqueria Sol Maya': { stops:[{name:'103 St',lines:['6'],walk:'4 min'}] },
+  // Spanish / Latin
+  'Tasca NYC':         { stops:[{name:'2 Av',lines:['F'],walk:'3 min'},{name:'1 Av',lines:['L'],walk:'6 min'}] },
+  'Pio Pio 8':         { stops:[{name:'Jackson Hts-Roosevelt Av',lines:['E','F','M','R','7'],walk:'6 min'}] },
+  'Casa Ora':          { stops:[{name:'Bedford Av',lines:['L'],walk:'5 min'},{name:'Lorimer St',lines:['L'],walk:'6 min'}] },
+  'Cocotazo':          { stops:[{name:'103 St',lines:['6'],walk:'4 min'}] },
+  'Casa Adela':        { stops:[{name:'1 Av',lines:['L'],walk:'5 min'},{name:'Delancey St',lines:['J','M','Z'],walk:'7 min'}] },
+  '188 Cuchifritos':   { stops:[{name:'149 St-Grand Concourse',lines:['2','4','5'],walk:'5 min'}] },
+  'House of Mofongo':  { stops:[{name:'181 St',lines:['A'],walk:'4 min'},{name:'181 St',lines:['1'],walk:'6 min'}] },
+  'Limusina':          { stops:[{name:'Bedford Av',lines:['L'],walk:'5 min'},{name:'Lorimer St',lines:['L'],walk:'7 min'}] },
+  // Brunch
+  'Maya':              { stops:[{name:'68 St-Hunter College',lines:['6'],walk:'4 min'}] },
+  'Blvd Bistro':       { stops:[{name:'116 St',lines:['2','3'],walk:'3 min'},{name:'125 St',lines:['2','3'],walk:'7 min'}] },
+  'Caliente Cab':      { stops:[{name:'Christopher St',lines:['1'],walk:'3 min'},{name:'14 St',lines:['A','C','E'],walk:'5 min'}] },
+  // Ramen
+  'Ippudo':            { stops:[{name:'Astor Pl',lines:['6'],walk:'4 min'},{name:'8 St-NYU',lines:['N','R','W'],walk:'5 min'}] },
+  'KUU Ramen':         { stops:[{name:'34 St-Herald Sq',lines:['B','D','F','M','N','Q','R','W'],walk:'4 min'},{name:'33 St',lines:['6'],walk:'5 min'}] },
+  'Pho Bar':           { stops:[{name:'Atlantic Av-Barclays Ctr',lines:['B','D','N','Q','R','2','3','4','5'],walk:'4 min'},{name:'Nevins St',lines:['2','3','4','5'],walk:'6 min'}] },
+  // Handrolls
+  'Kazunori':          { stops:[{name:'14 St-Union Sq',lines:['4','5','6','L','N','Q','R','W'],walk:'4 min'}] },
+  'Sushi Tokoro':      { stops:[{name:'Canal St',lines:['A','C','E'],walk:'5 min'},{name:'Spring St',lines:['C','E'],walk:'6 min'}] },
+  'Ozakaya':           { stops:[{name:'Bedford Av',lines:['L'],walk:'4 min'}] },
+  // Soul
+  "Melba's":           { stops:[{name:'116 St',lines:['B','C'],walk:'4 min'},{name:'125 St',lines:['A','B','C','D'],walk:'7 min'}] },
+  'File Gumbo Bar':    { stops:[{name:'Spring St',lines:['C','E'],walk:'4 min'},{name:'Houston St',lines:['1'],walk:'5 min'}] },
+  'Africa Kine':       { stops:[{name:'116 St',lines:['B','C'],walk:'4 min'}] },
+  '1803':              { stops:[{name:'Franklin St',lines:['1'],walk:'3 min'},{name:'Canal St',lines:['A','C','E'],walk:'5 min'}] },
+  "Amy Ruth's":        { stops:[{name:'116 St',lines:['B','C'],walk:'3 min'},{name:'116 St',lines:['2','3'],walk:'6 min'}] },
+  'Lowerline':         { stops:[{name:'Bergen St',lines:['F','G'],walk:'4 min'},{name:'Atlantic Av-Barclays Ctr',lines:['2','3','4','5','B','D','N','Q','R'],walk:'8 min'}] },
+  // Bodegas & Delis
+  'Blue Sky Deli Hajis':    { stops:[{name:'103 St',lines:['6'],walk:'3 min'}] },
+  'Milano Market':          { stops:[{name:'Cathedral Pkwy',lines:['1'],walk:'4 min'},{name:'116 St',lines:['B','C'],walk:'5 min'}] },
+  "Sunny and Annie's Deli": { stops:[{name:'1 Av',lines:['L'],walk:'3 min'}] },
+  'Boro Brine':        { stops:[{name:'Bedford-Nostrand Avs',lines:['G'],walk:'5 min'},{name:'Classon Av',lines:['G'],walk:'7 min'}] },
+  // Korean
+  'Gaonnuri':          { stops:[{name:'34 St-Herald Sq',lines:['B','D','F','M','N','Q','R','W'],walk:'5 min'}] },
+  'Barn Joo':          { stops:[{name:'23 St',lines:['N','R','W'],walk:'3 min'},{name:'23 St',lines:['F','M'],walk:'4 min'}] },
+  'Kisa':              { stops:[{name:'2 Av',lines:['F'],walk:'4 min'},{name:'Delancey St',lines:['J','M','Z'],walk:'5 min'}] },
+  // Thai
+  'Soothr':            { stops:[{name:'1 Av',lines:['L'],walk:'4 min'},{name:'Astor Pl',lines:['6'],walk:'6 min'}] },
+  'Fish Cheeks':       { stops:[{name:'Broadway-Lafayette',lines:['B','D','F','M'],walk:'3 min'},{name:'Bleecker St',lines:['6'],walk:'4 min'}] },
+  'Thai Diner':        { stops:[{name:'Spring St',lines:['C','E'],walk:'3 min'},{name:'Prince St',lines:['N','R','W'],walk:'5 min'}] },
+  'Wayla':             { stops:[{name:'Delancey St',lines:['J','M','Z'],walk:'4 min'},{name:'Essex St',lines:['F'],walk:'4 min'}] },
+  'Lum Lum':           { stops:[{name:'Bedford Av',lines:['L'],walk:'5 min'}] },
+  'Up Thai':           { stops:[{name:'68 St-Hunter College',lines:['6'],walk:'3 min'}] },
+  'Mitr Thai':         { stops:[{name:'30 Av',lines:['N','W'],walk:'4 min'},{name:'Broadway',lines:['N','W'],walk:'6 min'}] },
+  'Dim Sum Sam':       { stops:[{name:'Varies by location',lines:[],walk:''}], note:'Multiple NYC locations - check the closest one.' },
+  'Mountain House Flushing': { stops:[{name:'Flushing-Main St',lines:['7'],walk:'5 min'}], note:'End of the 7 line - plan the ride out to Flushing.' },
+  'Jiang Nan':         { stops:[{name:'Flushing-Main St',lines:['7'],walk:'4 min'}], note:'Flushing destination - worth the 7 train ride.' },
+  'Antidote':          { stops:[{name:'23 St',lines:['F','M','R','W','6'],walk:'3 min'},{name:'28 St',lines:['6'],walk:'5 min'}] },
+  'CHELI 浙里':        { stops:[{name:'Flushing-Main St',lines:['7'],walk:'4 min'}], note:'Flushing destination - worth the 7 train ride.' },
+  'The Best Sichuan 21 一品成都': { stops:[{name:'Flushing-Main St',lines:['7'],walk:'5 min'}], note:'Flushing destination - worth the 7 train ride.' },
+  'Chi Restaurant & Bar': { stops:[{name:'23 St',lines:['C','E'],walk:'4 min'},{name:'14 St',lines:['A','C','E','L'],walk:'7 min'}] },
+  'Moon Kee':          { stops:[{name:'Cathedral Pkwy (110 St)',lines:['1'],walk:'3 min'},{name:'103 St',lines:['1'],walk:'5 min'}] },
+  'Adda':              { stops:[{name:'Court Sq',lines:['G','7','E','M'],walk:'8 min'},{name:'46 St',lines:['7'],walk:'10 min'}], note:'LIC destination - pair the trip with the surrounding restaurants.' },
+  'Semma':             { stops:[{name:'Christopher St',lines:['1'],walk:'3 min'},{name:'W 4 St',lines:['A','B','C','D','E','F','M'],walk:'5 min'}], note:'Reservations book out weeks ahead - plan early.' },
+  'Spice Symphony Times Square': { stops:[{name:'42 St-Times Sq',lines:['1','2','3','7','N','Q','R','W'],walk:'3 min'},{name:'42 St-Bryant Park',lines:['B','D','F','M'],walk:'5 min'}] },
+  'Cloves Indian Cuisine': { stops:[{name:'33 St',lines:['6'],walk:'4 min'},{name:'28 St',lines:['6'],walk:'5 min'}] },
+  'Angel Indian Restaurant': { stops:[{name:'1 Av',lines:['L'],walk:'3 min'},{name:'2 Av',lines:['F'],walk:'5 min'}], note:'On East Village Curry Row.' },
+  'Patiala Indian Grill & Bar': { stops:[{name:'5 Av-Bryant Park',lines:['7'],walk:'4 min'},{name:'42 St-Bryant Park',lines:['B','D','F','M'],walk:'5 min'}] },
+  'Bombay Chowk':      { stops:[{name:'Varies by location',lines:[],walk:''}], note:'Multiple NYC locations - check the closest one.' },
+  // Mediterranean
+  'Delos Greek Restaurant': { stops:[{name:'Astoria Blvd',lines:['N','W'],walk:'5 min'}] },
+  "Kiki's Greek":      { stops:[{name:'Delancey St',lines:['J','M','Z'],walk:'4 min'},{name:'Essex St',lines:['F'],walk:'5 min'}] },
+  'Loukoumi Taverna':  { stops:[{name:'Astoria-Ditmars Blvd',lines:['N','W'],walk:'6 min'}] },
+  'Taverna Kyklades':  { stops:[{name:'Astoria-Ditmars Blvd',lines:['N','W'],walk:'4 min'}], note:'No reservations on weekends - expect a wait, it earns it.' },
+  'Bahari Estiatorio': { stops:[{name:'30 Av',lines:['N','W'],walk:'4 min'},{name:'Broadway',lines:['N','W'],walk:'6 min'}] },
+  'Agnanti':           { stops:[{name:'Astoria-Ditmars Blvd',lines:['N','W'],walk:'5 min'}], note:'Across from Athens Square Park.' },
+  'Aliada':            { stops:[{name:'30 Av',lines:['N','W'],walk:'4 min'},{name:'Broadway',lines:['N','W'],walk:'7 min'}] },
+  'Ambrosia Garden':   { stops:[{name:'Astoria-Ditmars Blvd',lines:['N','W'],walk:'5 min'},{name:'30 Av',lines:['N','W'],walk:'8 min'}] },
+  'AMAVI':             { stops:[{name:'33 St',lines:['6'],walk:'4 min'},{name:'28 St',lines:['6'],walk:'5 min'}] },
+  'LALYN':             { stops:[{name:'47-50 Sts-Rockefeller Ctr',lines:['B','D','F','M'],walk:'4 min'},{name:'49 St',lines:['N','R','W'],walk:'5 min'}] },
+  'Motek Flatiron':    { stops:[{name:'23 St',lines:['F','M','R','W','6'],walk:'3 min'},{name:'28 St',lines:['6'],walk:'5 min'}] },
+  "Or'Esh":            { stops:[{name:'Bedford Av',lines:['L'],walk:'5 min'},{name:'Marcy Av',lines:['J','M','Z'],walk:'8 min'}] },
+  'Ilili NoMad':       { stops:[{name:'28 St',lines:['6'],walk:'3 min'},{name:'28 St',lines:['N','R','W'],walk:'5 min'}] },
+  // Italian
+  'La Lanterna di Vittorio': { stops:[{name:'W 4 St',lines:['A','C','E'],walk:'3 min'},{name:'Christopher St',lines:['1'],walk:'4 min'}] },
+  "Carmine's":         { stops:[{name:'50 St',lines:['1'],walk:'4 min'},{name:'49 St',lines:['N','R','W'],walk:'5 min'}] },
+  "Randazzo's Clam Bar": { stops:[{name:'Sheepshead Bay',lines:['B','Q'],walk:'4 min'},{name:'Neck Rd',lines:['Q'],walk:'10 min'}] },
+  'Giulietta':         { stops:[{name:'Bedford-Nostrand Avs',lines:['G'],walk:'4 min'},{name:'Classon Av',lines:['G'],walk:'6 min'}] },
+  'Torrisi':           { stops:[{name:'Spring St',lines:['6'],walk:'3 min'},{name:'Prince St',lines:['N','R','W'],walk:'4 min'}], note:'Reservations required - book ahead.' },
+  'Trattoria Trecolori': { stops:[{name:'42 St-Times Sq',lines:['1','2','3','7','N','Q','R','W'],walk:'3 min'},{name:'49 St',lines:['N','R','W'],walk:'4 min'}], note:'Pre-theatre dinner - book around showtime.' },
+  // Vegan
+  'Anixi':             { stops:[{name:'23 St',lines:['C','E'],walk:'4 min'},{name:'14 St',lines:['A','C','E'],walk:'6 min'}] },
+  'Planta':            { stops:[{name:'23 St',lines:['N','R','W'],walk:'3 min'},{name:'23 St',lines:['F','M'],walk:'4 min'}] },
+  'Coletta':           { stops:[{name:'33 St',lines:['6'],walk:'4 min'}] },
+  'Ras Plant Based':   { stops:[{name:'Franklin Av',lines:['2','3','4','5'],walk:'5 min'},{name:'Nostrand Av',lines:['3'],walk:'6 min'}] },
+  'Massawa':           { stops:[{name:'Cathedral Pkwy',lines:['1'],walk:'4 min'},{name:'116 St',lines:['B','C'],walk:'5 min'}] },
+  'Bunna Cafe':        { stops:[{name:'Morgan Av',lines:['L'],walk:'4 min'},{name:'Jefferson St',lines:['L'],walk:'8 min'}] },
+  'Spicy Moon':        { stops:[{name:'W 4 St',lines:['A','C','E'],walk:'3 min'},{name:'Christopher St',lines:['1'],walk:'5 min'}] },
+  'Willow Vegan Bistro': { stops:[{name:'23 St',lines:['1','C','E'],walk:'3 min'},{name:'14 St',lines:['1','2','3'],walk:'7 min'}] },
+  // Pizza
+  'Koronet Pizza':     { stops:[{name:'Cathedral Pkwy',lines:['1'],walk:'3 min'}] },
+  'Cuts and Slices':   { stops:[{name:'Gates Av',lines:['J','M','Z'],walk:'5 min'},{name:'Halsey St',lines:['J'],walk:'6 min'}] },
+  // Street Carts
+  'Hooda Grill':       { stops:[{name:'Cathedral Pkwy',lines:['1'],walk:'3 min'}], note:'Cart near Columbia campus gates' },
+  "Adel's Famous Halal": { stops:[{name:'51 St',lines:['6'],walk:'3 min'},{name:'Lexington Av/53 St',lines:['E','M'],walk:'4 min'}], note:'Midtown cart near 2nd Av' },
+  // Dessert
+  'Dominique Ansel Bakery': { stops:[{name:'Spring St',lines:['C','E'],walk:'3 min'},{name:'Prince St',lines:['N','R','W'],walk:'4 min'}] },
+  'Spot Dessert Bar':  { stops:[{name:'Astor Pl',lines:['6'],walk:'4 min'},{name:'8 St-NYU',lines:['N','R','W'],walk:'4 min'}] },
+  'Maiko Matcha Cafe': { stops:[{name:'Canal St',lines:['J','N','Q','R','W','Z','6'],walk:'5 min'}] },
+  'Anita Gelato':      { stops:[{name:'77 St',lines:['6'],walk:'3 min'},{name:'72 St',lines:['Q'],walk:'5 min'}] },
+  // Food Halls
+  'Chelsea Market':    { stops:[{name:'14 St',lines:['A','C','E'],walk:'2 min'},{name:'8 Av',lines:['L'],walk:'3 min'}] },
+  'Time Out Market New York': { stops:[{name:'York St',lines:['F'],walk:'4 min'},{name:'High St',lines:['A','C'],walk:'5 min'}] },
+  // Chelsea & Highline
+  'Tao Downtown':      { stops:[{name:'23 St',lines:['C','E'],walk:'4 min'},{name:'23 St',lines:['1'],walk:'5 min'}] },
+  'Buddakan':          { stops:[{name:'23 St',lines:['C','E'],walk:'3 min'},{name:'23 St',lines:['1'],walk:'5 min'}] },
+  'Catch NYC':         { stops:[{name:'14 St',lines:['A','C','E'],walk:'4 min'},{name:'8 Av',lines:['L'],walk:'5 min'}] },
+  // New spots
+  'Charles Pan Fried Chicken': { stops:[{name:'145 St',lines:['A','B','C','D'],walk:'4 min'},{name:'145 St',lines:['1'],walk:'6 min'}] },
+  'Cocodaq':           { stops:[{name:'42 St-Bryant Park',lines:['B','D','F','M'],walk:'4 min'},{name:'5 Av',lines:['7'],walk:'5 min'}] },
+  'Koko Wings':        { stops:[{name:'14 St-Union Sq',lines:['4','5','6','L','N','Q','R','W'],walk:'5 min'}] },
+  'Mēdüzā Mediterrania New York': { stops:[{name:'14 St-8 Av',lines:['A','C','E','L'],walk:'5 min'},{name:'14 St',lines:['1','2','3'],walk:'7 min'}] },
+  'Sei Less':          { stops:[{name:'23 St',lines:['C','E'],walk:'3 min'},{name:'14 St',lines:['A','C','E'],walk:'5 min'}] },
+  'Fushimi Times Square': { stops:[{name:'49 St',lines:['N','R','W'],walk:'3 min'},{name:'42 St-Times Sq',lines:['1','2','3','7','N','Q','R','W'],walk:'5 min'}] },
+  'Sunday Morning':    { stops:[{name:'Delancey St-Essex St',lines:['F','J','M','Z'],walk:'4 min'},{name:'2 Av',lines:['F'],walk:'6 min'}] },
+  "L'Industrie Pizza": { stops:[{name:'Bedford Av',lines:['L'],walk:'4 min'},{name:'Lorimer St',lines:['L'],walk:'5 min'}] },
+  "Mama's Too":        { stops:[{name:'Cathedral Pkwy',lines:['1'],walk:'3 min'},{name:'110 St',lines:['B','C'],walk:'5 min'}] },
+  'Lucali':            { stops:[{name:'Carroll St',lines:['F','G'],walk:'5 min'},{name:'Bergen St',lines:['F','G'],walk:'8 min'}], note:'Cash only, BYOB - bring wine and patience.' },
+  "John's of Bleecker Street": { stops:[{name:'Christopher St-Sheridan Sq',lines:['1'],walk:'3 min'},{name:'W 4 St-Washington Sq',lines:['A','B','C','D','E','F','M'],walk:'5 min'}], note:'Whole pies only - no slices.' },
+  "Scarr's Pizza":     { stops:[{name:'East Broadway',lines:['F'],walk:'4 min'},{name:'Delancey St-Essex St',lines:['F','J','M','Z'],walk:'6 min'}] },
+  'Smorgasburg':       { stops:[{name:'Bedford Av',lines:['L'],walk:'12 min'},{name:'Prospect Park',lines:['B','Q','S'],walk:'5 min'}], note:'Williamsburg on Saturdays, Prospect Park on Sundays.' },
+  'Japan Fes':         { stops:[{name:'Varies by date',lines:[],walk:''}], note:'Travels across Manhattan, Brooklyn, and Queens. Check schedule before heading out.' },
+  'San Gennaro Festival': { stops:[{name:'Canal St',lines:['6','J','N','Q','R','W','Z'],walk:'3 min'},{name:'Spring St',lines:['6'],walk:'5 min'}], note:'Mulberry Street, Little Italy. 11 days every September.' },
+};
+
+// MTA line → official bullet color
+const LINE_COLORS = {
+  '1':'#EE352E','2':'#EE352E','3':'#EE352E',
+  '4':'#00933C','5':'#00933C','6':'#00933C',
+  '7':'#B933AD',
+  'A':'#0039A6','C':'#0039A6','E':'#0039A6',
+  'B':'#FF6319','D':'#FF6319','F':'#FF6319','M':'#FF6319',
+  'G':'#6CBE45',
+  'J':'#996633','Z':'#996633',
+  'L':'#A7A9AC',
+  'N':'#FCCC0A','Q':'#FCCC0A','R':'#FCCC0A','W':'#FCCC0A',
+  'S':'#808183',
+  'SIR':'#0078C6',
+};
+
+function renderTransit(r) {
+  const el = document.getElementById('transitContent');
+  const data = TRANSIT[r.n];
+  if (!data) {
+    el.innerHTML = `<span class="transit-error">Transit info coming soon for this spot.</span>`;
+    return;
+  }
+  let html = '';
+  data.stops.forEach((stop, i) => {
+    if (i > 0) html += `<div class="transit-divider">also nearby</div>`;
+    const bullets = stop.lines.map((l, li) => {
+      const bg = LINE_COLORS[l] || '#555';
+      const textColor = ['N','Q','R','W'].includes(l) ? '#000' : '#fff';
+      return `<span class="mta-bullet" style="background:${bg};color:${textColor}">${l}</span>`;
+    }).join('');
+    html += `<div class="transit-stop">
+      <div class="transit-lines">${bullets}</div>
+      <div class="transit-info">
+        <div class="transit-stop-name">${stop.name}</div>
+        <div class="transit-walk">${stop.walk}</div>
+      </div>
+    </div>`;
+  });
+  if (data.note) html += `<p style="font-size:12px;color:var(--ink-soft);margin-top:8px;font-style:italic">${data.note}</p>`;
+  el.innerHTML = html;
+}
+
+render();
+</script>
+</body>
+</html>
